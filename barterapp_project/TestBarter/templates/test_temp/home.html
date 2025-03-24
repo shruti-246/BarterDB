@@ -1,12 +1,21 @@
+{% load static %}
 <!DOCTYPE html>
+<html lang="en">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BarterApp</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" href="{% static 'TestBarter/style.css' %}"> 
 </head>
 
 <body>
     <h1>Welcome to BarterApp</h1>
-    <p><a href="/signup/">Sign Up</a> | <a href="/login/">Login</a></p>
+    <div class="navbar">
+        <a href="#" class="active">Home</a>
+        <a href="/signup/">Sign up</a>
+        <a href="/login/">Login</a>
+      </div>
+
 </body>
 
 </html>
