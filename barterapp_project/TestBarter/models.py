@@ -7,6 +7,8 @@ class User(models.Model):
     Role = models.CharField(max_length=10)
     PhoneNumber = models.CharField(max_length=15)
     Password = models.CharField(max_length=100)
+    def __str__(self):
+        return f"{self.Name} ({self.Email})"
 
 class Product(models.Model):
     ProductID = models.AutoField(primary_key=True)

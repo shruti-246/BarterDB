@@ -20,14 +20,12 @@ def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
-        role = request.POST['role']  
+        role = request.POST['role']
 
         user = User.objects.filter(Email=email, Password=password, Role=role).first()
         if user:
             request.session['user_id'] = user.UserID
-            return redirect('add_product')
     return render(request, 'test_temp/login.html')
-
 
 # Add Product
 def add_product(request):
