@@ -1,7 +1,32 @@
-<h2>Login</h2>
-<form method="POST">
-  {% csrf_token %}
-  Email: <input type="email" name="email"><br><br>
-  Password: <input type="password" name="password"><br><br>
-  <button type="submit">Login</button>
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <link rel="stylesheet" href="{% static 'TestBarter/style.css' %}"> 
+</head>
+
+<body>
+    <h1>Login</h1>
+    <div class="navbar"> <!-- This is the navigation bar -->
+        <a href="/home/">Home</a>
+        <a href="/signup/">Sign up</a>
+        <a href="/login/">Login</a>
+    </div>
+    <p>Login to your account to start exchanging goods and services!</p>
+    <p>Fill out the form below to login:</p>
+
+    <div class="signUpContainer">
+      <form method="POST">
+        {% csrf_token %}
+        <h2> Login</h2>
+        Email: <input type="email" name="email"><br><br>
+        Password: <input type="password" name="password"><br><br>
+        <button type="submit">Login</button>
+      </form>
+    </div>
+
+</body>
+</html>

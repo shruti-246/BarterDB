@@ -1,7 +1,6 @@
 
-a:link{
-    text-decoration: none;
-    
+a{
+    color:purple;
 }
 
 .navbar {
@@ -20,3 +19,35 @@ a:link{
     padding: 14px 16px;
     text-decoration: none;
 }
+.navbar a.active {
+    background-color: #666;
+    color: white;
+  }
+
+.signUpContainer{
+    width: 60%;
+    padding: 0 20px 20px 20px;
+    border: 3px solid #333;
+    border-radius: 10px;
+    background-color: #f4f4f4;
+    text-align: left;
+    margin:0 auto;
+  }
+
+.signUpForm{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: left;
+    width: 100%;
+ } 
+
+ .button{
+    background-color:#f4f4f4;
+ }
+
+ .bottomContainer{
+    position: absolute; 
+    top: 71%;  
+    right: 20%;
+ }

@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect
 from .models import User, Product
 
 def home(request):
-    return render(request, 'test_temp/home.html')
+    return render(request, 'home.html')
 
 # Sign Up
 def signup(request):
