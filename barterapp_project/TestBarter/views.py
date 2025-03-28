@@ -8,10 +8,8 @@ def home(request):
 def signup(request):
     if request.method == 'POST':
         User.objects.create(
-            Name=request.POST['name'],
+            Name=request.POST['username'],
             Email=request.POST['email'],
-            Role=request.POST['role'],
-            PhoneNumber=request.POST['phone'],
             Password=request.POST['password']
         )
         return redirect('login')
@@ -22,10 +20,11 @@ def login(request):
     if request.method == 'POST':
         email = request.POST['email']
         password = request.POST['password']
-        user = User.objects.filter(Email=email, Password=password).first()
+        role = request.POST['role']
+
+        user = User.objects.filter(Email=email, Password=password, Role=role).first()
         if user:
-            request.session['user_id'] = user.UserID  # Store user ID in session
-            return redirect('add_product')
+            request.session['user_id'] = user.UserID
     return render(request, 'test_temp/login.html')
 
 # Add Product

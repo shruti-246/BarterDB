@@ -1,10 +1,53 @@
-<h2>Add Product</h2>
-<form method="POST">
-  {% csrf_token %}
-  Name: <input type="text" name="name"><br><br>
-  Category: <input type="text" name="category"><br><br>
-  Description: <textarea name="desc"></textarea><br><br>
-  Condition: <input type="text" name="condition"><br><br>
-  Value: <input type="number" step="0.01" name="value"><br><br>
-  <button type="submit">Add Product</button>
-</form>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product</title>
+    <link rel="stylesheet" href="{% static 'TestBarter/style.css' %}">
+</head>
+
+<body>
+    <h1>Add a Product</h1>
+    
+    <div class="navbar">
+        <a href="/home/">Home</a>
+        <a href="/signup/">Sign up</a>
+        <a href="/login/">Login</a>
+        <a href="/add_product/">Add Product</a>
+    </div>
+
+    <p>Fill in the details of the product you want to offer for barter:</p>
+
+    <div class="signUpContainer">
+        <form class="signUpForm" action="/add_product/" method="POST">
+            {% csrf_token %}
+            <h2>Product Information</h2>
+
+            <label for="product_name">Product Name:</label><br>
+            <input type="text" id="product_name" name="product_name" required><br>
+
+            <label for="category">Category:</label><br>
+            <input type="text" id="category" name="category" required><br>
+
+            <label for="description">Description:</label><br>
+            <textarea id="description" name="description" rows="3" required></textarea><br>
+
+            <label for="condition">Condition:</label><br>
+            <input type="text" id="condition" name="condition" required><br>
+
+            <label for="value">Estimated Value ($):</label><br>
+            <input type="number" id="value" name="value" required><br>
+
+            <button type="submit">Submit Product</button>
+        </form>
+    </div>
+
+    <div class="bottomContainer">
+        <p>Want to view your account? <a href="/login/">Login</a></p>
+        <p>Return to <a href="/home/">Home</a></p>
+    </div>
+</body>
+</html>
+
