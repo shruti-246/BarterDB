@@ -4,20 +4,37 @@ a{
 }
 
 .navbar {
+    display: flex;
+    align-items: center;
     overflow: hidden;
     background-color: #333;
     position: sticky;
-    position: -webkit-sticky;
-    top: 0;
+    top: 0px;
   }
 
-.navbar a{
+.navbar p{
+    margin: 0;
+    font-weight: bold;
+    font-size: 23px;
     float: left;
-    display: block;
+    padding: 14px 14px;
     color: white;
     text-align: center;
-    padding: 14px 16px;
+}
+
+.nav-links{
+    float: right;
+    width: 100%;
+}
+
+.navbar a{
+    float: right;
+    display: block;
+    padding: 14px 14px;
+    color: white;
+    text-align: center;
     text-decoration: none;
+    line-height: 25px;
 }
 .navbar a.active {
     background-color: #666;
@@ -47,7 +64,7 @@ a{
  }
 
  .bottomContainer{
-    position: absolute; 
-    top: 71%;  
-    right: 20%;
+    margin-top: 20px; 
+    right: 50%;
+
  }
