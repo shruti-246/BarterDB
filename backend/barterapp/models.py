@@ -47,6 +47,7 @@ class Trade(models.Model):
 class QRCode(models.Model):
     trade = models.OneToOneField(Trade, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='qrcodes/')
+    is_used = models.BooleanField(default=False)  # ✅ New field to track QR usage
 
     def __str__(self):
         return f"QR for Trade {self.trade.id}"

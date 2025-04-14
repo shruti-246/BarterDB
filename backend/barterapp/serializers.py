@@ -24,6 +24,25 @@ class UserSerializer(serializers.ModelSerializer):
         user = User.objects.create_user(**validated_data)
         return user
 
+class UserProfileSerializer(serializers.ModelSerializer):
+    items_sold = serializers.SerializerMethodField()
+    items_bought = serializers.SerializerMethodField()
+
+    class Meta:
+        model = User
+        fields = ['id', 'username', 'email', 'first_name', 'last_name',
+                  'phone_number', 'address', 'items_sold', 'items_bought']
+
+    def get_items_sold(self, user):
+        from .models import Trade
+        accepted_trades = Trade.objects.filter(offered_by=user, status='accepted')
+        return [trade.offered_product.name for trade in accepted_trades]
+
+    def get_items_bought(self, user):
+        from .models import Trade
+        accepted_trades = Trade.objects.filter(requested_product__owner=user, status='accepted')
+        return [trade.requested_product.name for trade in accepted_trades]
+
 class TradeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Trade

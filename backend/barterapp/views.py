@@ -4,12 +4,20 @@ from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from .models import Product
+from rest_framework.views import APIView
 from .serializers import ProductSerializer, UserSerializer
 from .permissions import IsOwnerOrReadOnly
 from django.contrib.auth import get_user_model
-from .models import Trade
 from .serializers import TradeSerializer
 from django.db.models import Q
+from .serializers import UserProfileSerializer
+from django_filters.rest_framework import DjangoFilterBackend
+from rest_framework.filters import SearchFilter
+from rest_framework.generics import ListAPIView
+from .models import Trade, QRCode
+from .serializers import TradeSerializer
+from .models import User, Product, Trade
+from .permissions import IsAdminUser
 
 User = get_user_model()
 
@@ -35,6 +43,9 @@ class ProductListCreateView(generics.ListCreateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated]
+    filter_backends = [DjangoFilterBackend, SearchFilter]
+    filterset_fields = ['category']
+    search_fields = ['name']
 
     def perform_create(self, serializer):
         serializer.save(owner=self.request.user)
@@ -94,3 +105,71 @@ class TradeHistoryView(generics.ListAPIView):
             Q(offered_by=self.request.user) |
             Q(requested_product__owner=self.request.user)
         )
+
+class ProfileView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data)
+
+    def put(self, request):
+        serializer = UserProfileSerializer(request.user, data=request.data, partial=True)
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data)
+        return Response(serializer.errors, status=400)
+    
+class AdminAllTradesView(ListAPIView):
+    queryset = Trade.objects.all()
+    serializer_class = TradeSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+class AdminSummaryView(APIView):
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+    def get(self, request):
+        summary = {
+            "total_users": User.objects.count(),
+            "total_products": Product.objects.count(),
+            "total_trades": Trade.objects.count(),
+            "completed_trades": Trade.objects.filter(status='accepted').count()
+        }
+        return Response(summary)
+
+class QRCodeVerificationView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request):
+        trade_id = request.data.get("trade_id")
+
+        try:
+            trade = Trade.objects.get(id=trade_id)
+        except Trade.DoesNotExist:
+            return Response({"error": "Invalid trade ID."}, status=404)
+
+        # Check that trade is accepted
+        if trade.status != "accepted":
+            return Response({"error": "Trade is not in accepted state."}, status=400)
+
+        # Check if the user is involved in the trade
+        if request.user != trade.offered_by and request.user != trade.requested_product.owner:
+            return Response({"error": "You are not authorized to verify this trade."}, status=403)
+
+        # Check QR code exists and hasn't been used
+        try:
+            qr = QRCode.objects.get(trade=trade)
+        except QRCode.DoesNotExist:
+            return Response({"error": "QR code not found."}, status=404)
+
+        if qr.is_used:
+            return Response({"error": "QR code already used."}, status=400)
+
+        # ✅ All good — mark trade as completed and QR as used
+        trade.status = "completed"
+        trade.save()
+
+        qr.is_used = True
+        qr.save()
+
+        return Response({"message": "Trade verified and marked as completed."})
