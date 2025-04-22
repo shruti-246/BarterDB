@@ -26,7 +26,8 @@ class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         response = super().post(request, *args, **kwargs)
         token = Token.objects.get(key=response.data['token'])
-        return Response({'token': token.key, 'user_id': token.user_id})
+        role = request.data.get("role", "buyer")
+        return Response({'token': token.key, 'user_id': token.user_id, 'role': role})
 
 # 🧾 Register View
 class RegisterUserView(generics.CreateAPIView):
@@ -68,7 +69,15 @@ class TradeCreateView(generics.CreateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_create(self, serializer):
+        offered_product = serializer.validated_data.get('offered_product')
+    
+        # Add validation here if you want to restrict what users can offer.
+        if not offered_product:
+            raise serializer.ValidationError("Offered product is required.")
+
+        # Save with offered_by still set to the user making the request
         serializer.save(offered_by=self.request.user)
+
 
 class MySentTradesView(generics.ListAPIView):
     serializer_class = TradeSerializer

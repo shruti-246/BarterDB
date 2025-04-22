@@ -4,13 +4,16 @@ from django.contrib.auth import get_user_model
 from .models import Trade
 
 # 🛍 Product Serializer
+from rest_framework import serializers
+from .models import Product
+
 class ProductSerializer(serializers.ModelSerializer):
-    owner = serializers.StringRelatedField(read_only=True)
+    owner_id = serializers.IntegerField(source='owner.id', read_only=True)
 
     class Meta:
         model = Product
         fields = '__all__'
-
+        
 # 👤 User Serializer (for registration)
 User = get_user_model()
 

@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure--&-f*&cp@5qtm^ul%l7r-50(vp7@6!adw2q_0tgsxmd+#!xvh4
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['10.0.2.2', 'localhost', '127.0.0.1']
 
 AUTH_USER_MODEL = 'barterapp.User'
 
