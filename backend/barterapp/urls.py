@@ -16,7 +16,7 @@ from .views import QRCodeVerificationView
 urlpatterns = [
     path('products/', ProductListCreateView.as_view(), name='product-list-create'),
     path('products/<int:pk>/', ProductDetailView.as_view(), name='product-detail'),
-    path('my-products/', MyProductListView.as_view(), name='my-products'),  # 👈 add this
+    path('my-products/', MyProductListView.as_view(), name='my-products'),  
     path('register/', RegisterUserView.as_view(), name='register'),
     path('login/', CustomAuthToken.as_view(), name='login'),
     path('trades/', TradeCreateView.as_view(), name='create-trade'),
